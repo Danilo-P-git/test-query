@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\DB;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,8 +17,8 @@ use Illuminate\Support\Facades\DB;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/api/search?lat={$lat}&lon={$lon}', function($lat, $lon) {
-  $radius = 5;
+Route::get('search/lat={lat}&lon={lon}', function($lat, $lon){
+  $radius = 20;
   $finder = DB::table('appartments')
                ->selectRaw("id, address, lat, lon,
                 ( 6371 * acos( cos( radians(?) ) *
@@ -32,6 +32,6 @@ Route::get('/api/search?lat={$lat}&lon={$lon}', function($lat, $lon) {
    ->offset(0)
    ->limit(20)
    ->get();
-   dd('icia');
+   dd($finder);
   return response()->json($finder);
 });
