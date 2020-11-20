@@ -70,9 +70,14 @@
   </head>
 
   <body>
+    <form action="{{route('post')}}" method="POST">
+      @csrf
+      @method('POST')
+
     <input id="search" type="text" name="search" value="">
-    <button id="button-search" class="button" type="button" name="button">Cerca</button>
+    <button id="button-search" class="button" type="submit" name="button">Cerca</button>
     {{-- <div id="map" class="map" style="width: 600px; height: 600px;"></div> --}}
+    </form>
 
     <script src="{{asset("js/app.js")}}"></script>
   </body>

@@ -8,8 +8,9 @@ use Illuminate\Support\Facades\DB;
 
 class ApiController extends Controller
 {
-    public function get($lat, $lon) {
-      dd('ciao');
+    public function get() {
+      $lat = $_GET['lat'];
+      $lon = $_GET['lon'];
       $radius = 5;
       $finder = DB::table('appartments')
                    ->selectRaw("id, address, lat, lon,

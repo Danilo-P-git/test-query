@@ -20,4 +20,6 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/index', 'AppartmentController@search')->name('search');
+Route::get('/get', 'AppartmentController@get')->name('get');
+Route::post('/post', 'AppartmentController@post')->name('post');
+

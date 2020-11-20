@@ -17,21 +17,22 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('search/lat={lat}&lon={lon}', function($lat, $lon){
-  $radius = 20;
-  $finder = DB::table('appartments')
-               ->selectRaw("id, address, lat, lon,
-                ( 6371 * acos( cos( radians(?) ) *
-                  cos( radians( lat ) )
-                  * cos( radians( lon ) - radians(?)
-                  ) + sin( radians(?) ) *
-                  sin( radians( lat ) ) )
-                ) AS distance", [$lat, $lon, $lat])
-   ->having("distance", "<", $radius)
-   ->orderBy("distance",'asc')
-   ->offset(0)
-   ->limit(20)
-   ->get();
-   dd($finder);
-  return response()->json($finder);
-});
+Route::get('/search', 'ApiController@get');
+// {
+//   $radius = 20;
+//   $finder = DB::table('appartments')
+//                ->selectRaw("id, address, lat, lon,
+//                 ( 6371 * acos( cos( radians(?) ) *
+//                   cos( radians( lat ) )
+//                   * cos( radians( lon ) - radians(?)
+//                   ) + sin( radians(?) ) *
+//                   sin( radians( lat ) ) )
+//                 ) AS distance", [$lat, $lon, $lat])
+//    ->having("distance", "<", $radius)
+//    ->orderBy("distance",'asc')
+//    ->offset(0)
+//    ->limit(20)
+//    ->get();
+//   return response()->json($finder);
+// });
+// Route::get('/search', function(){   dd('porcodio'); });

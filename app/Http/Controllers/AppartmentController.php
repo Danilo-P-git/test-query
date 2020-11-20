@@ -16,28 +16,36 @@ class AppartmentController extends Controller
     {
 
     }
-
-    public function search()
+    public function get()
     {
-      // $lat = 37.5020995;
-      // $lon = 15.0627673;
-      // $radius = 5;
-      // $finder = DB::table('appartments')
-      //              ->selectRaw("id, address, lat, lon,
-      //               ( 6371 * acos( cos( radians(?) ) *
-      //                 cos( radians( lat ) )
-      //                 * cos( radians( lon ) - radians(?)
-      //                 ) + sin( radians(?) ) *
-      //                 sin( radians( lat ) ) )
-      //               ) AS distance", [$lat, $lon, $lat])
-      //  ->having("distance", "<", $radius)
-      //  ->orderBy("distance",'asc')
-      //  ->offset(0)
-      //  ->limit(20)
-      //  ->get();
-      // $appartments = Appartment::all();
-      //
-      return view('index');
+        return view('get');
+    }
+    public function post(Request $request)
+    {
+        $address = $request->search;
+        // $prepAddr = str_replace(' ','+',$address);
+        $geocode=file_get_contents('https://api.tomtom.com/search/2/geocode/'.$address.'.json?limit=1&key=sVorgm5GUAIyuOOj6t6WLNHniiKmKUSo');
+        $output= json_decode($geocode);
+        $lat = $output->results[0]->position->lat;
+        $lon = $output->results[0]->position->lon;
+
+      $radius = 5;
+      $finder = DB::table('appartments')
+                   ->selectRaw("id, address, lat, lon,
+                    ( 6371 * acos( cos( radians(?) ) *
+                      cos( radians( lat ) )
+                      * cos( radians( lon ) - radians(?)
+                      ) + sin( radians(?) ) *
+                      sin( radians( lat ) ) )
+                    ) AS distance", [$lat, $lon, $lat])
+       ->having("distance", "<", $radius)
+       ->orderBy("distance",'asc')
+       ->offset(0)
+       ->limit(20)
+       ->get();
+    //   $appartments = Appartment::all();
+      
+      return view('result-search', compact('finder'));
     }
     /**
      * Show the form for creating a new resource.
